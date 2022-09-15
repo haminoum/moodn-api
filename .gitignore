@@ -23,7 +23,7 @@
 hs_err_pid*
 /target/
 HELP.md
-feelin-api.iml
+feeln-api.iml
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar

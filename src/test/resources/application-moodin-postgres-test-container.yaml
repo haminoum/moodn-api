@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:11:///integration-tests-db
+
+logging:
+  level:
+    org.ktorm: TRACE
