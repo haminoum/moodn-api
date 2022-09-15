@@ -2,20 +2,14 @@ package com.hero.moodin
 
 import com.hero.feelin.domain.model.Mood
 import com.hero.feelin.domain.model.MoodType
-import com.hero.moodin.domain.api.FeelingsAPI
-import com.hero.moodin.infrastructure.database.MoodTable
+import com.hero.moodin.domain.api.MoodsAPI
 import com.hero.moodin.infrastructure.database.cleanAllTables
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.ktorm.database.Database
-import org.ktorm.dsl.from
-import org.ktorm.dsl.map
-import org.ktorm.dsl.select
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.http.HttpStatus
 
 @SpringBootTest(
     properties = [
@@ -29,7 +23,7 @@ class MoodIntegrationTest {
     private lateinit var http: TestRestTemplate
 
     @Autowired
-    private lateinit var feelingsAPI: FeelingsAPI
+    private lateinit var moodsAPI: MoodsAPI
 
     @Autowired
     private lateinit var database: Database
@@ -41,7 +35,7 @@ class MoodIntegrationTest {
         cleanAllTables(database)
 
         goodMood = Mood(type = MoodType.NEUTRAL)
-        feelingsAPI.create(goodMood)
+//        moodsAPI.create(goodMood)
     }
 
     @Test

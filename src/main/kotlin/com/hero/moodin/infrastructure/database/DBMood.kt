@@ -1,5 +1,6 @@
 import com.hero.feelin.domain.model.Mood
 import com.hero.feelin.domain.model.MoodId
+import com.hero.feelin.domain.model.UserId
 import com.hero.moodin.domain.spi.MoodSPI
 import com.hero.moodin.infrastructure.database.MoodTable
 import org.ktorm.database.Database
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Component
 @Component
 class DBMood(val database: Database) : MoodSPI {
 
-    override fun create(mood: Mood): Mood {
+    override fun create(mood: Mood, id: UserId): Mood {
         database.insert(MoodTable) {
             set(it.externalId, mood.id)
             set(it.type, mood.type)

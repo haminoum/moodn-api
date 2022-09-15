@@ -2,6 +2,6 @@ package com.hero.moodin.domain.api
 
 import com.hero.feelin.domain.model.Mood
 
-interface FeelingsAPI {
-    fun create(mood: Mood)
+interface MoodsAPI {
+    fun create(mood: Mood, username: String)
 }

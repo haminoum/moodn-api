@@ -10,3 +10,6 @@ data class User(
 class UserId(override val value: String) : TypeSafeString() {
     constructor() : this(ID.create().toString())
 }
+
+// TODO create userInfo
+//created_at  timestamptz not null,

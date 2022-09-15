@@ -14,4 +14,5 @@ object MoodTable : Table<Nothing>("mood") {
     val externalId = text("external_id").transform(fromUnderlyingValue = ::MoodId, toUnderlyingValue = MoodId::asString)
     val type = enum<MoodType>("type")
     val createdAt = timestamp("created_at")
+    val user = int("user")
 }

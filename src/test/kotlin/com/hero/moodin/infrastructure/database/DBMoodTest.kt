@@ -4,6 +4,8 @@ import DBMood
 import com.hero.feelin.domain.model.Mood
 import com.hero.feelin.domain.model.MoodId
 import com.hero.feelin.domain.model.MoodType
+import com.hero.feelin.domain.model.User
+import fixture
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -31,8 +33,8 @@ internal class DBMoodTest {
     @Test
     internal fun `should create and find mood`() {
         val mood = Mood(MoodId(), type = MoodType.HAPPY)
-
-        repository.create(mood)
+        val user = User.fixture()
+        repository.create(mood, user.id)
 
         val actualMood = repository.find(mood.id)
 
