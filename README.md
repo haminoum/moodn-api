@@ -1,5 +1,3 @@
-
-
 # mood-api
 
 A service that helps with the creation of moods.
@@ -22,13 +20,13 @@ brew install grpcurl
 3. [Install Docker](https://docs.docker.com/desktop/mac/install/)
 
 ## Running locally
-process-design-api runs on port `55555`
+mood-api runs on port `55555`
 
 
 Spin up a postgres database locally
 ```bash
 docker run --name postgres-local -e POSTGRES_PASSWORD=postgres -e TS_TUNE_MAX_CONNS=100 -d -p 5432:5432 timescale/timescaledb:latest-pg11
-PGPASSWORD=postgres createdb -h ${DOCKER_HOST_IP:-localhost} -U postgres moood-api-db
+PGPASSWORD=postgres createdb -h ${DOCKER_HOST_IP:-localhost} -U postgres moodin-api-db
 ```
 
 ```bash
