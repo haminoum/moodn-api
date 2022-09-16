@@ -1,8 +1,8 @@
 package com.hero.moodin.domain.logic
 
 import com.hero.feelin.domain.model.Mood
-import com.hero.feelin.domain.model.User
-import com.hero.feelin.domain.model.UserId
+import com.hero.moodin.domain.model.User
+import com.hero.moodin.domain.model.UserId
 import com.hero.moodin.domain.spi.MoodSPI
 import com.hero.moodin.domain.spi.UserSPI
 import fixture
@@ -52,5 +52,27 @@ internal class MoodServiceTest {
     internal fun `shouldn't create mood when user doesn't exist`() {
         val mood = Mood.fixture()
         assertThrows<IllegalArgumentException> { unit.create(mood, "Rougue") }
+    }
+
+    @Test
+    internal fun `should create multiple moods for a user`() {
+        TODO("Unimplemented test")
+//        val moods = listOf(
+//            Mood(id = MoodId(), type = MoodType.HAPPY),
+//            Mood(id = MoodId(), type = MoodType.NEUTRAL),
+//            Mood(id = MoodId(), type = MoodType.SAD),
+//        )
+//        val testMoods = moods.toSet()
+//        val user = User.fixture()
+
+//        val moodsCaptor = argumentCaptor<Set<Mood>>()
+//        val usernameCaptor = argumentCaptor<String>()
+
+//        unit.createAll(testMoods, user.username)
+//
+//        verify(userSPI, times(1)).find(user.username)
+//        verify(moodSPI, times(1)).createAll(moods, user.id)
+//        assertThat(moodsCaptor.firstValue).isEqualTo(moods)
+//        assertThat(usernameCaptor.firstValue).isEqualTo(user.username)
     }
 }
