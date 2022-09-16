@@ -1,8 +1,13 @@
-package com.hero.feelin.domain.model
+package com.hero.moodin.domain.model
+
+import com.hero.feelin.domain.model.ID
+import com.hero.feelin.domain.model.TypeSafeString
+import java.time.Instant
 
 data class User(
     val id: UserId = UserId(),
-    val username: String
+    val username: String,
+    val createdAt: Instant = Instant.now(),
 ) {
     companion object
 }
@@ -10,6 +15,3 @@ data class User(
 class UserId(override val value: String) : TypeSafeString() {
     constructor() : this(ID.create().toString())
 }
-
-// TODO create userInfo
-//created_at  timestamptz not null,

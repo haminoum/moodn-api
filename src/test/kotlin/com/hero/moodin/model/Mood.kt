@@ -6,3 +6,4 @@ internal fun Mood.Companion.fixture() = Mood(
     id = MoodId(),
     type = MoodType.HAPPY,
 )
+

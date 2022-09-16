@@ -1,6 +1,6 @@
 package com.hero.moodin.application.http
 
-import org.junit.jupiter.api.Assertions.*
+
 import org.junit.jupiter.api.Test
 
 internal class MoodControllerTest {

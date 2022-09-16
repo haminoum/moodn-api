@@ -1,7 +1,7 @@
 CREATE TABLE mood
 (
-    id          serial primary key,
-    external_id text not null,
-    type        text not null,
-    created_at  timestamptz not null
+    id          SERIAL PRIMARY KEY ,
+    external_id TEXT NOT NULL,
+    type        TEXT NOT NULL,
+    created_at  timestamptz NOT NULL
 );
