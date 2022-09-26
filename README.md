@@ -26,9 +26,14 @@ mood-api runs on port `55555`
 Spin up a postgres database locally
 ```bash
 docker run --name postgres-local -e POSTGRES_PASSWORD=postgres -e TS_TUNE_MAX_CONNS=100 -d -p 5432:5432 timescale/timescaledb:latest-pg11
-PGPASSWORD=postgres createdb -h ${DOCKER_HOST_IP:-localhost} -U postgres moodin-api-db
+PGPASSWORD=postgres createdb -h ${DOCKER_HOST_IP:-localhost} -U postgres moodn-api-db
 ```
 
+Accessing local db
+```bash
+docker exec -it <container-id> /bin/sh
+psql -U postgres
+```
 ```bash
 ./mvnw org.springframework.boot:spring-boot-maven-plugin:run
 ```
@@ -42,7 +47,7 @@ curl "http://localhost:{$PORT}/moods"
 
 
 
-### Insight
+## Insight
 [Emotion vs Mood](https://www.iihs.edu.lk/pluginfile.php/18502/mod_resource/content/1/emotions.pdf)
 - Most experts believe that emotions are more fleeting than moods
 - For

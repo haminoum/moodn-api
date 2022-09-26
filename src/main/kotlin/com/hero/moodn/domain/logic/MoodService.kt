@@ -1,25 +1,23 @@
 package com.hero.moodn.domain.logic
 
-import com.hero.feelin.domain.model.Mood
-import com.hero.moodn.domain.api.MoodsAPI
-import com.hero.moodn.domain.spi.MoodSPI
-import com.hero.moodn.domain.spi.UserSPI
+import com.hero.moodn.domain.api.Moods
+import com.hero.moodn.domain.model.Mood
 import mu.KotlinLogging
 import org.springframework.stereotype.Component
 
 @Component
-class MoodService(private val moodsSPI: MoodSPI, private val userSPI: UserSPI) : MoodsAPI {
-    val logger = KotlinLogging.logger {}
+class MoodService() : Moods {
+    private val logger = KotlinLogging.logger {}
 
     override fun create(mood: Mood, username: String) {
-        val user = userSPI.find(username) ?: throw IllegalArgumentException("User $username does'nt exist")
-        moodsSPI.create(mood, user.id)
-        logger.info("Mood created for $username")
+//        val user = userRepository.find(username) ?: throw IllegalArgumentException("User $username does'nt exist")
+//        moodRepository.create(mood, user.id)
+        logger.info("Mood ${mood.id} created for $username")
     }
 
-    override fun createAll(moods: Set<Mood>, username: String) {
-        val user = userSPI.find(username) ?: throw IllegalArgumentException("User $username does'nt exist")
-        moodsSPI.createAll(moods, user.id)
-        logger.info("Moods created for $username")
+    override fun createAll(moods: List<Mood>, username: String) {
+//        val user = userRepository.find(username) ?: throw IllegalArgumentException("User $username does'nt exist")
+//        moodRepository.createAll(moods, user.id)
+        logger.info("${moods.size} moods created for $username")
     }
 }

@@ -1,9 +1,9 @@
-package com.hero.moodn.domain.logic
+package com.hero.moodn.moodnapi.domain.logic
 
-/*import com.hero.moodn.domain.api.Users
-import com.hero.moodn.domain.model.User
-import com.hero.moodn.domain.model.UserId
-import com.hero.moodn.domain.spi.UserRepository
+import com.hero.moodn.moodnapi.domain.api.Users
+import com.hero.moodn.moodnapi.domain.model.User
+import com.hero.moodn.moodnapi.domain.model.UserId
+import com.hero.moodn.moodnapi.domain.spi.UserRepository
 import mu.KotlinLogging
 import org.springframework.stereotype.Component
 import java.time.Instant
@@ -21,4 +21,4 @@ class UserService(private val userRepository: UserRepository) : Users {
         userRepository.create(user)
         logger.info("Created user $username")
     }
-}*/
+}

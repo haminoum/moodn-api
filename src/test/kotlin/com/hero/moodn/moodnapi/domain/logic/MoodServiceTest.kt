@@ -1,12 +1,12 @@
-package com.hero.moodn.domain.logic
+package com.hero.moodn.moodnapi.domain.logic
 
-import com.hero.moodn.domain.model.Mood
-import com.hero.moodn.domain.model.MoodId
-import com.hero.moodn.domain.model.MoodType
-import com.hero.moodn.domain.model.User
-import com.hero.moodn.domain.model.UserId
-import com.hero.moodn.domain.spi.MoodRepository
-import com.hero.moodn.domain.spi.UserRepository
+import com.hero.moodn.moodnapi.domain.model.Mood
+import com.hero.moodn.moodnapi.domain.model.MoodId
+import com.hero.moodn.moodnapi.domain.model.MoodType
+import com.hero.moodn.moodnapi.domain.model.User
+import com.hero.moodn.moodnapi.domain.model.UserId
+import com.hero.moodn.moodnapi.domain.spi.MoodRepository
+import com.hero.moodn.moodnapi.domain.spi.UserRepository
 import fixture
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
