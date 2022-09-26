@@ -1,9 +1,10 @@
-package com.hero.moodn.moodnapi.infrastructure.database
+package com.hero.moodn.infrastructure.database
 
-import com.hero.moodn.moodnapi.domain.model.Mood
-import com.hero.moodn.moodnapi.domain.model.MoodId
-import com.hero.moodn.moodnapi.domain.model.UserId
-import com.hero.moodn.moodnapi.domain.spi.MoodRepository
+/*
+import com.hero.moodn.domain.model.Mood
+import com.hero.moodn.domain.model.MoodId
+import com.hero.moodn.domain.model.UserId
+import com.hero.moodn.domain.spi.MoodRepository
 import org.ktorm.database.Database
 import org.ktorm.dsl.QueryRowSet
 import org.ktorm.dsl.eq
@@ -54,3 +55,4 @@ private fun toMood(row: QueryRowSet) = Mood(
     type = row[MoodTable.type]!!,
     createdAt = row[MoodTable.createdAt]!!,
 )
+*/

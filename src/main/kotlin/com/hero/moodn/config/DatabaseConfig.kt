@@ -10,6 +10,9 @@ import javax.sql.DataSource
 
 @Configuration
 class DatabaseConfig {
+/**
+ * Register the [Database] instance as a Spring bean.
+ *//*
 
     /**
      * Register the [Database] instance as a Spring bean.

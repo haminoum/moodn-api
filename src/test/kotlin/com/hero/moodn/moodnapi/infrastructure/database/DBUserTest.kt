@@ -1,7 +1,7 @@
 package com.hero.moodn.moodnapi.infrastructure.database
 
-import com.hero.moodn.moodnapi.config.DatabaseConfig
-import com.hero.moodn.moodnapi.domain.model.User
+import com.hero.moodn.config.DatabaseConfig
+import com.hero.moodn.domain.model.User
 import fixture
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach

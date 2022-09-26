@@ -1,7 +1,8 @@
+package com.hero.moodn.application.http
 
-import com.hero.moodn.moodnapi.domain.api.Moods
-import com.hero.moodn.moodnapi.domain.model.Mood
-import com.hero.moodn.moodnapi.domain.model.MoodType
+import com.hero.moodn.domain.api.Moods
+import com.hero.moodn.domain.model.Mood
+import com.hero.moodn.domain.model.MoodType
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam

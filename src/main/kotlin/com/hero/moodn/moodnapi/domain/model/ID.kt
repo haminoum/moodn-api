@@ -1,4 +1,4 @@
-package com.hero.moodn.moodnapi.domain.model
+package com.hero.moodn.domain.model
 
 import com.aventrix.jnanoid.jnanoid.NanoIdUtils
 import java.security.SecureRandom
