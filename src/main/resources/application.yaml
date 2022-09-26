@@ -1,7 +1,7 @@
 spring:
-  main:
-    banner-mode: "off"
-  datasource:
-    hikari:
-      minimum-idle: 1
-      maximum-pool-size: 4
+    main:
+        banner-mode: off
+    datasource:
+        hikari:
+            minimum-idle: 1
+            maximum-pool-size: 4

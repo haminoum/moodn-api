@@ -1,8 +1,13 @@
 spring:
   datasource:
-    url: jdbc:postgresql://${DOCKER_HOST_IP:localhost}:5432/moodin-api-db
+    url: jdbc:postgresql://${DOCKER_HOST_IP:localhost}:5432/moodn-api-db
     username: postgres
     password: postgres
 
 server:
   port: 55555
+
+logging:
+  level:
+    root: INFO
+    org.ktorm: debug
