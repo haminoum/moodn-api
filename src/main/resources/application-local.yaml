@@ -5,7 +5,7 @@ spring:
     password: postgres
 
 server:
-  port: 55555
+  port: 58080
 
 logging:
   level:

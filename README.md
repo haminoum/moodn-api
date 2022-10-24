@@ -41,8 +41,7 @@ psql -U postgres
 ### Accessing API
 ```bash
 # Create mood
-curl "http://localhost:{$PORT}/moods"
- 
+curl "http://localhost:{$PORT}/moods/create?type=${MOOD}&username=${USER}" -XPOST
 ```
 
 
