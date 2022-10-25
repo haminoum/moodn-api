@@ -11,11 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest
 import org.springframework.context.annotation.Import
+import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
 
-@JdbcTest(properties = ["spring.profiles.active=moodn-postgres-test-container"])
+@JdbcTest(properties = ["spring.profiles.active=postgres-test-container"])
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import(DBUser::class, DatabaseConfig::class)
+@Transactional
 @Tag("unit-test")
 internal class DBUserTest {
     @Autowired
@@ -34,7 +36,7 @@ internal class DBUserTest {
         val user = User.fixture()
         repository.create(user)
 
-        val actualUser = repository.find(user.username)
+        val actualUser = repository.find(user.id)
 
         assertThat(actualUser).isEqualTo(user)
     }
@@ -44,11 +46,13 @@ internal class DBUserTest {
         val user = User.fixture()
         val anotherUser = User.fixture().copy(username = "Big Ham")
         val yetAnotherUser = User.fixture().copy(username = "Lil Ham")
+        val users = setOf(user, anotherUser, yetAnotherUser)
 
-        repository.createOrUpdateAll(setOf(anotherUser, user, yetAnotherUser))
+        repository.createOrUpdateAll(users)
 
-        assertThat(repository.find(user.username)).isEqualTo(user)
-        assertThat(repository.find(anotherUser.username)).isEqualTo(anotherUser)
+        assertThat(repository.find(user.id)).isEqualTo(user)
+        assertThat(repository.find(anotherUser.id)).isEqualTo(anotherUser)
+        assertThat(repository.find(yetAnotherUser.id)).isEqualTo(yetAnotherUser)
     }
 
     @Test
@@ -60,7 +64,7 @@ internal class DBUserTest {
         val updatedUser = user.copy(createdAt = now)
         repository.createOrUpdateAll(setOf(updatedUser))
 
-        val userFromDB = repository.find(user.username)!!
+        val userFromDB = repository.find(user.id)!!
 
         assertThat(userFromDB.createdAt).isEqualTo(now)
     }
