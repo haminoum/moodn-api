@@ -1,4 +1,4 @@
-package com.hero.moodn.moodnapi
+package com.hero.moodn
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

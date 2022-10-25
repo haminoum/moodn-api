@@ -14,7 +14,8 @@ class ID private constructor(value: String) {
 
         @JvmStatic
         fun create(random: Random = Companion.random.get()): ID {
-            return of(NanoIdUtils.randomNanoId(random, characters, length))
+            val randomNanoId = NanoIdUtils.randomNanoId(random, characters, length)
+            return of(randomNanoId)
         }
 
         @JvmStatic

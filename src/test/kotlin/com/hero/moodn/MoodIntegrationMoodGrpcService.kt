@@ -10,6 +10,7 @@ import com.hero.moodn.infrastructure.database.UserTable
 import com.hero.moodn.infrastructure.database.cleanAllTables
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.ktorm.database.Database
 import org.ktorm.dsl.from
@@ -26,6 +27,7 @@ import org.springframework.http.HttpStatus
     ],
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
 )
+@Tag("integration-test")
 class MoodIntegrationMoodGrpcService {
 
     @Autowired

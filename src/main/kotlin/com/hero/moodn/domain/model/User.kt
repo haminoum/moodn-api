@@ -1,4 +1,4 @@
-package com.hero.moodn.moodnapi.domain.model
+package com.hero.moodn.domain.model
 
 import java.time.Instant
 

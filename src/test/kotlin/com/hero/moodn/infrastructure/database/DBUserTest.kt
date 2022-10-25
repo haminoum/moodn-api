@@ -1,9 +1,10 @@
-package com.hero.moodn.moodnapi.infrastructure.database
+package com.hero.moodn.infrastructure.database
 
 import com.hero.moodn.domain.model.User
 import fixture
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.ktorm.database.Database
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,6 +16,7 @@ import java.time.Instant
 @JdbcTest(properties = ["spring.profiles.active=moodn-postgres-test-container"])
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import(DBUser::class, DatabaseConfig::class)
+@Tag("unit-test")
 internal class DBUserTest {
     @Autowired
     private lateinit var repository: DBUser

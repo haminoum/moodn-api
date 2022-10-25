@@ -1,4 +1,4 @@
-import com.hero.moodn.domain.model.Mood
+import com.hero.moodn.domain.model.Mood // ktlint-disable filename
 import com.hero.moodn.domain.model.MoodId
 import com.hero.moodn.domain.model.MoodType
 

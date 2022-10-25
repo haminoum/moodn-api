@@ -10,6 +10,7 @@ import com.hero.moodn.domain.spi.UserRepository
 import fixture
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.kotlin.argumentCaptor
@@ -18,6 +19,7 @@ import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
+@Tag("unit-test")
 internal class MoodServiceTest {
 
     private lateinit var unit: MoodService
@@ -61,7 +63,7 @@ internal class MoodServiceTest {
         val moods = listOf(
             Mood(id = MoodId(), type = MoodType.HAPPY),
             Mood(id = MoodId(), type = MoodType.NEUTRAL),
-            Mood(id = MoodId(), type = MoodType.SAD)
+            Mood(id = MoodId(), type = MoodType.SAD),
         )
         val user = User.fixture()
 
