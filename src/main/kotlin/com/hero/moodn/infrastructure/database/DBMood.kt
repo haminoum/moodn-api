@@ -17,11 +17,6 @@ import org.springframework.stereotype.Component
 @Component
 class DBMood(val database: Database) : MoodRepository {
 
-    override fun create(mood: Mood, userId: UserId): Mood {
-        createAll(listOf(mood), userId)
-        return mood
-    }
-
     override fun find(id: MoodId): Mood? =
         database.from(MoodTable).select(MoodTable.columns).where(MoodTable.externalId eq id).map(::toMood).firstOrNull()
 

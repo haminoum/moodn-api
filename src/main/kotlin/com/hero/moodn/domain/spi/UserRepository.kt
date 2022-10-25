@@ -1,6 +1,7 @@
 package com.hero.moodn.domain.spi
 
 import com.hero.moodn.domain.model.User
+import com.hero.moodn.domain.model.UserId
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -15,10 +16,10 @@ interface UserRepository {
 
     /**
      * Finds a user by username
-     * @param username of requested User
-     * @return found User
+     * @param userId of requested User
+     * @return found [User]
      */
-    fun find(username: String): User?
+    fun find(userId: UserId): User?
 
     /**
      * Creates or updates users

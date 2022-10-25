@@ -3,6 +3,7 @@ package com.hero.moodn.moodnapi
 import com.hero.moodn.domain.api.Users
 import com.hero.moodn.domain.model.Mood
 import com.hero.moodn.domain.model.MoodType
+import com.hero.moodn.domain.model.User
 import com.hero.moodn.domain.model.UserId
 import com.hero.moodn.domain.spi.MoodRepository
 import com.hero.moodn.infrastructure.database.MoodTable
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpStatus
+import java.time.Instant
 
 @SpringBootTest(
     properties = [
@@ -43,16 +45,16 @@ class MoodIntegrationMoodGrpcService {
     private lateinit var database: Database
 
     lateinit var goodMood: Mood
-    lateinit var username: String
+    lateinit var user: User
 
     @BeforeEach
     internal fun setUp() {
         cleanAllTables(database)
 
         goodMood = Mood(type = MoodType.NEUTRAL)
-        username = "Lil Ham"
-        userAPI.create(username)
-        moodRepository.create(goodMood, UserId())
+        user = User(UserId(), "Lil Ham", Instant.now())
+        userAPI.create(user)
+        moodRepository.createAll(listOf(goodMood), UserId())
     }
 
     @Test
@@ -60,7 +62,7 @@ class MoodIntegrationMoodGrpcService {
         val data = """
             {
             type: "GOOD",
-            username: "$username"
+            username: "${user.username}"
             }
         """.trimIndent()
         val response = http.postForEntity("/moods/create", data, String::class.java)
@@ -80,6 +82,6 @@ class MoodIntegrationMoodGrpcService {
                 it[UserTable.username]!!
             }
 
-        assertThat(savedUsername).containsExactlyInAnyOrder(username)
+        assertThat(savedUsername).containsExactlyInAnyOrder(user.username)
     }
 }

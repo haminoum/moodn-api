@@ -1,6 +1,7 @@
 package com.hero.moodn.infrastructure.database
 
 import com.hero.moodn.domain.model.User
+import com.hero.moodn.domain.model.UserId
 import com.hero.moodn.domain.spi.UserRepository
 import org.ktorm.database.Database
 import org.ktorm.dsl.QueryRowSet
@@ -20,10 +21,10 @@ class DBUser(val database: Database) : UserRepository {
         return user
     }
 
-    override fun find(username: String): User? {
+    override fun find(userId: UserId): User? {
         return database.from(UserTable)
             .select(UserTable.columns)
-            .where(UserTable.username eq username)
+            .where(UserTable.externalId eq userId)
             .map(::toUser)
             .firstOrNull()
     }
