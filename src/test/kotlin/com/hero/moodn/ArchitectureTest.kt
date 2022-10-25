@@ -8,6 +8,7 @@ import com.tngtech.archunit.library.dependencies.SlicesRuleDefinition
 import io.github.whiskeysierra.archunit.hexagonal.matching
 
 @AnalyzeClasses(packagesOf = [App::class], importOptions = [DoNotIncludeTests::class])
+@Tag("architecture-test")
 object ArchitectureTest {
 
 

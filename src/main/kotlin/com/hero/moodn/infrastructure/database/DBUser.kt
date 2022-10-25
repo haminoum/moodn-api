@@ -1,4 +1,4 @@
-package com.hero.moodn.moodnapi.infrastructure.database
+package com.hero.moodn.infrastructure.database
 
 import com.hero.moodn.domain.model.User
 import com.hero.moodn.domain.spi.UserRepository
@@ -38,8 +38,8 @@ class DBUser(val database: Database) : UserRepository {
                 }
             }
             onConflict(UserTable.externalId) {
-                set(UserTable.username, excluded(it.username))
-                set(UserTable.createdAt, excluded(it.createdAt))
+                set(UserTable.username, excluded(UserTable.username))
+                set(UserTable.createdAt, excluded(UserTable.createdAt))
             }
         }
     }

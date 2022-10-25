@@ -1,4 +1,4 @@
-package com.hero.moodn.moodnapi.infrastructure.database
+package com.hero.moodn.infrastructure.database
 
 import com.hero.moodn.domain.model.UserId
 import org.ktorm.schema.Table
