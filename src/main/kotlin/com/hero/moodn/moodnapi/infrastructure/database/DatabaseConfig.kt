@@ -1,4 +1,4 @@
-package com.hero.moodn.config
+package com.hero.moodn.infrastructure.database
 
 import org.ktorm.database.Database
 import org.springframework.beans.factory.annotation.Autowired

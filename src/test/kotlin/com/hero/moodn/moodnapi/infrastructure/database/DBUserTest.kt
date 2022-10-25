@@ -1,6 +1,5 @@
 package com.hero.moodn.moodnapi.infrastructure.database
 
-import com.hero.moodn.config.DatabaseConfig
 import com.hero.moodn.domain.model.User
 import fixture
 import org.assertj.core.api.Assertions.assertThat

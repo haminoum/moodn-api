@@ -41,6 +41,7 @@ dependencies {
     compileOnly("org.springframework:spring-jdbc:5.3.23")
     compileOnly("com.aventrix.jnanoid:jnanoid:2.0.0")
     compileOnly("org.ktorm:ktorm-core:3.5.0")
+    compileOnly("org.ktorm:ktorm-support-postgresql:3.5.0")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     annotationProcessor("org.projectlombok:lombok")
