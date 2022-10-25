@@ -1,5 +1,4 @@
 package com.hero.moodn.infrastructure.database
-/*
 
 import com.hero.moodn.domain.model.MoodId
 import com.hero.moodn.domain.model.MoodType
@@ -17,4 +16,3 @@ object MoodTable : Table<Nothing>("mood") {
     val createdAt = timestamp("created_at")
     val user = int("moodn_user")
 }
-*/
