@@ -1,6 +1,6 @@
 package com.hero.moodn.domain.logic
 
-/*import com.hero.moodn.domain.api.Users
+import com.hero.moodn.domain.api.Users
 import com.hero.moodn.domain.model.User
 import com.hero.moodn.domain.model.UserId
 import com.hero.moodn.domain.spi.UserRepository
@@ -21,4 +21,4 @@ class UserService(private val userRepository: UserRepository) : Users {
         userRepository.create(user)
         logger.info("Created user $username")
     }
-}*/
+}

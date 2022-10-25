@@ -1,6 +1,5 @@
 package com.hero.moodn.moodnapi.infrastructure.database
 
-import com.hero.moodn.config.DatabaseConfig
 import com.hero.moodn.domain.model.Mood
 import com.hero.moodn.domain.model.MoodId
 import com.hero.moodn.domain.model.MoodType

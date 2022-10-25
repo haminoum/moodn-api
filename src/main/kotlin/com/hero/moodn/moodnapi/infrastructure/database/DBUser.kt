@@ -1,6 +1,5 @@
 package com.hero.moodn.moodnapi.infrastructure.database
 
-/*
 import com.hero.moodn.domain.model.User
 import com.hero.moodn.domain.spi.UserRepository
 import org.ktorm.database.Database
@@ -51,4 +50,3 @@ class DBUser(val database: Database) : UserRepository {
         createdAt = row[UserTable.createdAt]!!,
     )
 }
-*/
