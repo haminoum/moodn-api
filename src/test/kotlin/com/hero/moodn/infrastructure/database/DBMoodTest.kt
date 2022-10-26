@@ -1,5 +1,6 @@
 package com.hero.moodn.infrastructure.database
 
+import com.hero.moodn.domain.model.Comment
 import com.hero.moodn.domain.model.Mood
 import com.hero.moodn.domain.model.User
 import fixture
@@ -13,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest
 import org.springframework.context.annotation.Import
 import org.springframework.transaction.annotation.Transactional
+import java.time.Instant
 
 @JdbcTest(properties = ["spring.profiles.active=postgres-test-container"])
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -37,14 +39,31 @@ internal class DBMoodTest {
 
     @Test
     internal fun `should create and find mood`() {
-        val mood = Mood.fixture()
         val user = User.fixture()
+        val mood = Mood.fixture().copy(user = user.id)
 
         userRepository.create(user)
         moodRepository.createAll(listOf(mood), user.id)
 
-        val actualMood = moodRepository.find(mood.id)
+        val actualMood = moodRepository.find(mood.id)!!
 
-        assertThat(actualMood).isEqualTo(mood)
+        assertThat(actualMood.id).isEqualTo(mood.id)
+        assertThat(actualMood.type).isEqualTo(mood.type)
+        assertThat(actualMood.user).isEqualTo(mood.user)
+    }
+
+    @Test
+    internal fun `should update mood`() {
+        val beforeNow = Instant.now().minusSeconds(200)
+        val user = User.fixture()
+        val mood = Mood.fixture().copy(user = user.id, createdAt = beforeNow, updatedAt = null)
+        val comment = Comment.fixture().copy(author = user.id)
+        userRepository.create(user)
+        moodRepository.createAll(listOf(mood), mood.user)
+
+        val updatedMood = moodRepository.updateMood(mood.id, comment)!!
+
+        assertThat(updatedMood.updatedAt).isNotNull
+        assertThat(updatedMood.updatedAt).isAfterOrEqualTo(mood.createdAt)
     }
 }

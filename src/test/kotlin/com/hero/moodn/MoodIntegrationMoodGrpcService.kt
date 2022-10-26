@@ -51,8 +51,8 @@ class MoodIntegrationMoodGrpcService {
     internal fun setUp() {
         cleanAllTables(database)
 
-        goodMood = Mood(type = MoodType.NEUTRAL)
         user = User(UserId(), "Lil Ham", Instant.now())
+        goodMood = Mood(type = MoodType.HAPPY, user = user.id)
         userAPI.create(user)
         moodRepository.createAll(listOf(goodMood), UserId())
     }
@@ -70,8 +70,13 @@ class MoodIntegrationMoodGrpcService {
 
         val savedMoods = database.from(MoodTable)
             .select(MoodTable.columns)
-            .map {
-                Mood(it[MoodTable.externalId]!!, it[MoodTable.type]!!, it[MoodTable.createdAt]!!)
+            .map { it ->
+                Mood(
+                    id = it[MoodTable.externalId]!!,
+                    type = it[MoodTable.type]!!,
+                    user = it[UserTable.externalId]!!,
+                    createdAt = it[MoodTable.createdAt]!!,
+                )
             }
 
         assertThat(savedMoods).containsExactlyInAnyOrder(goodMood)

@@ -11,8 +11,12 @@ enum class MoodType {
 data class Mood(
     val id: MoodId = MoodId(),
     val type: MoodType,
-    val createdAt: Instant = Instant.now()
+    val user: UserId,
+    val createdAt: Instant = Instant.now(),
+    val updatedAt: Instant? = Instant.now(),
+//    val comment: Comment?
 ) {
+
     companion object
 }
 

@@ -3,7 +3,8 @@ CREATE TABLE moodn_user
     id          SERIAL PRIMARY KEY,
     external_id TEXT NOT NULL,
     username    TEXT NOT NULL,
-    created_at timestamptz not null
+    created_at timestamptz not null,
+    updated_at timestamptz
 );
 
 CREATE UNIQUE INDEX moodn_user_external_id ON moodn_user(external_id);
