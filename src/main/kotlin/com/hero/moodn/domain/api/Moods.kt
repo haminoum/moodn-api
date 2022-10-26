@@ -1,20 +1,29 @@
 package com.hero.moodn.domain.api
 
+import com.hero.moodn.domain.model.Comment
 import com.hero.moodn.domain.model.Mood
+import com.hero.moodn.domain.model.MoodId
 import com.hero.moodn.domain.model.UserId
 
 interface Moods {
     /**
-     * Adds a new mood
+     * Creates a new mood
      * @param mood to be created
      * @param userId of user mood is created for
      */
-    fun add(mood: Mood, userId: UserId)
+    fun create(mood: Mood, userId: UserId)
+
+    /**
+     * Creates a comment to an existing mood
+     * @param moodId ID of the [Mood] to which a comment should be added
+     * @param comment the [Comment] to be added
+     */
+    fun createComment(moodId: MoodId, comment: Comment)
 
     /**
      * Creates multiples moods
      * @param moods list to be created
      * @param userId of user mood is created for
      */
-    fun addAll(moods: List<Mood>, userId: UserId)
+    fun createAll(moods: List<Mood>, userId: UserId)
 }

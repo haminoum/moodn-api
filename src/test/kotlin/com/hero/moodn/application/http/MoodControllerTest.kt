@@ -29,6 +29,6 @@ internal class MoodControllerTest {
 
         unit.addMood(mood.type.name, user.username)
 
-        verify(moods).add(any(), any())
+        verify(moods).create(any(), any())
     }
 }
