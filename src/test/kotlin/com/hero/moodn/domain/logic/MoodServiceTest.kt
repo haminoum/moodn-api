@@ -18,7 +18,6 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.times
-import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
@@ -31,8 +30,6 @@ internal class MoodServiceTest {
     private lateinit var unit: MoodService
     private lateinit var moodRepository: MoodRepository
     private lateinit var userRepository: UserRepository
-    private lateinit var user: User
-    private lateinit var mood: Mood
 
     @BeforeEach
     internal fun setUp() {
@@ -40,9 +37,6 @@ internal class MoodServiceTest {
         userRepository = mock()
 
         unit = MoodService(moodRepository, userRepository)
-
-        user = User.fixture()
-        mood = Mood.fixture()
     }
 
     @Nested
@@ -54,9 +48,9 @@ internal class MoodServiceTest {
         inner class Create {
             @Test
             internal fun `should create mood`() {
-                val mood = mood
+                val mood = Mood.fixture()
+                val user = User.fixture()
                 whenever(userRepository.find(user.id)).thenReturn(user)
-
                 val moodCaptor = argumentCaptor<Mood>()
                 val userIdCaptor = argumentCaptor<UserId>()
 
@@ -70,7 +64,8 @@ internal class MoodServiceTest {
 
             @Test
             internal fun `should create list of moods`() {
-                val mood = mood
+                val user = User.fixture()
+                val mood = Mood.fixture()
                 val anotherMood = mood.copy(id = MoodId())
                 val moods = listOf(mood, anotherMood)
                 whenever(userRepository.find(user.id)).thenReturn(user)
@@ -91,17 +86,16 @@ internal class MoodServiceTest {
         inner class Update {
             @Test
             internal fun `should update mood`() {
-                val user = user
-                val mood = mood.copy(type = SAD, user = user.id)
+                val user = User.fixture()
+                val mood = Mood.fixture().copy(type = SAD, user = user.id)
                 val updatedMood = mood.copy(type = HAPPY)
 
                 whenever(moodRepository.find(mood.id)).thenReturn(mood)
-                whenever(userRepository.find(any())).thenReturn(user)
 
                 val idCaptor = argumentCaptor<MoodId>()
                 val typeCaptor = argumentCaptor<MoodType>()
 
-                unit.updateType(updatedMood, user.id)
+                unit.updateType(updatedMood)
 
                 verify(moodRepository, times(1)).updateType(idCaptor.capture(), typeCaptor.capture())
                 assertThat(idCaptor.firstValue).isEqualTo(mood.id)
@@ -114,15 +108,13 @@ internal class MoodServiceTest {
         inner class Delete {
             @Test
             internal fun `should delete mood`() {
-                val user = user.copy()
-                val mood = mood.copy(type = SAD, user = user.id)
+                val mood = Mood.fixture().copy(type = SAD)
 
-                whenever(userRepository.find(any())).thenReturn(user)
                 whenever(moodRepository.find(mood.id)).thenReturn(mood)
 
                 val idCaptor = argumentCaptor<MoodId>()
 
-                unit.delete(mood.id, user.id)
+                unit.delete(mood.id)
 
                 verify(moodRepository, times(1)).delete(idCaptor.capture())
             }
@@ -155,8 +147,7 @@ internal class MoodServiceTest {
         inner class Update {
             @Test
             internal fun `update throws an error if no mood found`() {
-                whenever(userRepository.find(any())).thenReturn(user)
-                assertThrows<NoSuchElementException> { unit.updateType(Mood.fixture(), UserId()) }
+                assertThrows<NoSuchElementException> { unit.updateType(Mood.fixture()) }
                 verifyNoInteractions(userRepository)
             }
         }

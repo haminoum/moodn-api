@@ -1,13 +1,13 @@
 package com.hero.moodn.domain.api
 
 import com.hero.moodn.domain.model.Comment
-import com.hero.moodn.domain.model.MoodId
+import com.hero.moodn.domain.model.CommentId
 
 interface Comments {
 
     fun create(comment: Comment)
 
-    fun update(moodId: MoodId, comment: Comment)
+    fun update(comment: Comment)
 
-    fun delete(comment: Comment, moodId: MoodId)
+    fun delete(commentId: CommentId)
 }
