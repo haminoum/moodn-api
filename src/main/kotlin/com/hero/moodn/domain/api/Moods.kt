@@ -10,7 +10,6 @@ interface Moods {
 
     fun createAll(moods: List<Mood>, userId: UserId)
 
-    fun updateType(mood: Mood, userId: UserId)
-
-    fun delete(moodId: MoodId, userId: UserId): Boolean
+    fun delete(moodId: MoodId): Boolean
+    fun updateType(mood: Mood)
 }

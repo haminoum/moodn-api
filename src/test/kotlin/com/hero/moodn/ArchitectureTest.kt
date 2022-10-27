@@ -1,4 +1,5 @@
-package com.hero.moodn/*
+package com.hero.moodn
+/*
 
 import com.tngtech.archunit.core.importer.ImportOption.DoNotIncludeTests
 import com.tngtech.archunit.junit.AnalyzeClasses

@@ -2,7 +2,7 @@ package com.hero.moodn.domain.logic
 
 import com.hero.moodn.domain.api.Comments
 import com.hero.moodn.domain.model.Comment
-import com.hero.moodn.domain.model.Mood
+import com.hero.moodn.domain.model.CommentId
 import com.hero.moodn.domain.model.MoodId
 import com.hero.moodn.domain.spi.CommentRepository
 import com.hero.moodn.domain.spi.MoodRepository
@@ -17,25 +17,24 @@ class CommentService(private val moodRepository: MoodRepository, private val com
 
     @Transactional
     override fun create(comment: Comment) {
-        val mood = findMood(comment.mood)
+        checkIfMoodExists(comment.mood)
         commentRepository.createOrUpdateComment(comment)
-        logger.debug("Comment created for mood ${mood.id} by ${comment.mood}")
+        logger.debug("Comment created for mood ${comment.mood}")
     }
 
     @Transactional
-    override fun update(moodId: MoodId, comment: Comment) {
-        val commentsMood = findMood(comment.mood)
+    override fun update(comment: Comment) {
+        checkIfMoodExists(comment.mood)
         commentRepository.createOrUpdateComment(comment)
-        logger.debug("Comment updated for mood $moodId by ${comment.mood}")
+        logger.debug("Comment updated for mood ${comment.mood} by ${comment.mood}")
     }
 
-    @Transactional
-    override fun delete(comment: Comment, moodId: MoodId) {
-        val commentsMood = findMood(comment.mood)
-        commentRepository.delete(comment.id)
-        logger.debug("Comment deleted for mood $moodId by ${comment.mood}")
-    }
-
-    private fun findMood(moodId: MoodId): Mood =
+    private fun checkIfMoodExists(moodId: MoodId) =
         moodRepository.find(moodId) ?: throw NoSuchElementException("Mood $moodId not found")
+
+    @Transactional
+    override fun delete(commentId: CommentId) {
+        commentRepository.delete(commentId)
+        logger.debug("Comment $commentId deleted")
+    }
 }
