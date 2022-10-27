@@ -1,16 +1,14 @@
 package com.hero.moodn.domain.logic
 
 import com.hero.moodn.domain.api.Moods
-import com.hero.moodn.domain.model.Comment
 import com.hero.moodn.domain.model.Mood
 import com.hero.moodn.domain.model.MoodId
-import com.hero.moodn.domain.model.MoodType
+import com.hero.moodn.domain.model.User
 import com.hero.moodn.domain.model.UserId
 import com.hero.moodn.domain.spi.MoodRepository
 import com.hero.moodn.domain.spi.UserRepository
 import mu.KotlinLogging
 import org.springframework.stereotype.Component
-import org.springframework.transaction.annotation.Transactional
 
 @Component
 class MoodService(private val moodRepository: MoodRepository, private val userRepository: UserRepository) : Moods {
@@ -20,25 +18,38 @@ class MoodService(private val moodRepository: MoodRepository, private val userRe
         createAll(listOf(mood), userId)
     }
 
-    @Transactional
-    override fun createComment(moodId: MoodId, comment: Comment) {
-        val mood = moodRepository.find(moodId) ?: throw NoSuchElementException("Mood $moodId not found")
-        val user = userRepository.find(comment.author)
-            ?: throw IllegalArgumentException("Comment author ${comment.author} not found")
-        if (mood.user != user.id) throw IllegalArgumentException("User ${comment.author} is not expected user")
-        moodRepository.update(moodId, comment)
-    }
-
     override fun createAll(moods: List<Mood>, userId: UserId) {
-        val user = userRepository.find(userId) ?: throw NoSuchElementException("User $userId not found")
-        moodRepository.createAll(moods, user.id)
-        logger.info("Mood created for $userId")
+        validateUser(userId)
+        moodRepository.createAll(moods, userId)
+        logger.debug("Mood created for $userId")
     }
 
-    override fun update(moodId: MoodId, moodType: MoodType) {
-        val mood = moodRepository.find(moodId) ?: throw NoSuchElementException("Mood $moodId not found")
-        if (mood.type != moodType) {
-            moodRepository.update(moodId, moodType)
-        }
+    override fun updateType(mood: Mood, userId: UserId) {
+        validateUsers(mood.id, userId)
+        val existingMood = findMood(mood.id)
+        val differentTypes = (existingMood.type != mood.type)
+        if (differentTypes) moodRepository.updateType(mood.id, mood.type)
+        logger.debug("Mood ${mood.id} update for $userId")
     }
+
+    override fun delete(moodId: MoodId, userId: UserId): Boolean {
+        validateUsers(moodId, userId)
+        return moodRepository.delete(moodId)
+    }
+
+    private fun validateUser(userId: UserId) {
+        findUser(userId)
+    }
+
+    private fun validateUsers(moodId: MoodId, userId: UserId) {
+//
+//        val user = findUser(mood.user)
+//        if (mood.user != user.id) throw IllegalArgumentException("Invalid User")
+    }
+
+    private fun findMood(moodId: MoodId): Mood =
+        moodRepository.find(moodId) ?: throw NoSuchElementException("Mood $moodId not found")
+
+    private fun findUser(userId: UserId): User =
+        userRepository.find(userId) ?: throw throw NoSuchElementException("User $userId not found")
 }

@@ -4,7 +4,7 @@ import java.time.Instant
 
 enum class MoodType {
     HAPPY,
-    NEUTRAL,
+    OK,
     SAD,
 }
 
@@ -14,7 +14,7 @@ data class Mood(
     val user: UserId,
     val createdAt: Instant = Instant.now(),
     val updatedAt: Instant? = Instant.now(),
-//    val comment: Comment?
+    val comment: CommentId? = null,
 ) {
 
     companion object

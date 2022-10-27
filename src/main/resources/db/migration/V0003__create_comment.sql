@@ -4,11 +4,6 @@ CREATE TABLE comment
     external_id TEXT        NOT NULL,
     created_at  timestamptz NOT NULL,
     updated_at  timestamptz,
-    author      INT REFERENCES moodn_user (id),
+    mood      INT REFERENCES mood (id),
     content     TEXT
 );
-
-
---     val type = enum<MoodType>("type")
-
---     val comment = int("comment")

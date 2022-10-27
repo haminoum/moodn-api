@@ -13,6 +13,6 @@ object CommentTable : Table<Nothing>("comment") {
         text("external_id").transform(fromUnderlyingValue = ::CommentId, toUnderlyingValue = CommentId::asString)
     val createdAt = timestamp("created_at")
     val updatedAt = timestamp("updated_at")
-    val author = int("author")
+    val mood = int("mood")
     val content = text("content")
 }

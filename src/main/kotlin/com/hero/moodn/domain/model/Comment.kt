@@ -5,7 +5,7 @@ import java.time.Instant
 data class Comment(
     val id: CommentId = CommentId(),
     val content: String,
-    val author: UserId,
+    val mood: MoodId,
     val createdAt: Instant = Instant.now(),
     val updatedAt: Instant? = Instant.now(),
 ) {

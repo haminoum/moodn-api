@@ -1,6 +1,5 @@
 package com.hero.moodn.domain.logic
 
-import com.hero.moodn.domain.model.Comment
 import com.hero.moodn.domain.model.Mood
 import com.hero.moodn.domain.model.MoodId
 import com.hero.moodn.domain.model.MoodType
@@ -47,138 +46,123 @@ internal class MoodServiceTest {
     }
 
     @Nested
-    @DisplayName("Mood found")
-    inner class MoodFound {
-        @Test
-        internal fun `createComment updates mood`() {
-            val user = user
-            val mood = mood.copy(user = user.id)
-            val comment = Comment.fixture().copy(author = user.id)
+    @DisplayName("Valid")
+    inner class Valid {
 
-            whenever(moodRepository.find(any())).thenReturn(mood)
-            whenever(userRepository.find(any())).thenReturn(user)
+        @Nested
+        @DisplayName("Create")
+        inner class Create {
+            @Test
+            internal fun `should create mood`() {
+                val mood = mood
+                whenever(userRepository.find(user.id)).thenReturn(user)
 
-            unit.createComment(mood.id, comment)
+                val moodCaptor = argumentCaptor<Mood>()
+                val userIdCaptor = argumentCaptor<UserId>()
 
-            verify(moodRepository).find(mood.id)
-            verify(userRepository).find(user.id)
-            verify(moodRepository).update(mood.id, comment)
+                unit.create(mood, user.id)
+
+                verify(userRepository).find(user.id)
+                verify(moodRepository).createAll(listOf(moodCaptor.capture()), userIdCaptor.capture())
+                assertThat(moodCaptor.firstValue).isEqualTo(listOf(mood))
+                assertThat(userIdCaptor.firstValue).isEqualTo(user.id)
+            }
+
+            @Test
+            internal fun `should create list of moods`() {
+                val mood = mood
+                val anotherMood = mood.copy(id = MoodId())
+                val moods = listOf(mood, anotherMood)
+                whenever(userRepository.find(user.id)).thenReturn(user)
+
+                val moodCaptor = argumentCaptor<Mood>()
+                val userIdCaptor = argumentCaptor<UserId>()
+                unit.createAll(moods, user.id)
+
+                verify(userRepository, times(1)).find(user.id)
+                verify(moodRepository, times(1)).createAll(listOf(moodCaptor.capture()), userIdCaptor.capture())
+                assertThat(moodCaptor.firstValue).isEqualTo(moods)
+                assertThat(userIdCaptor.firstValue).isEqualTo(user.id)
+            }
         }
 
-        @Test
-        internal fun `should update mood`() {
-            val mood = mood.copy(type = SAD)
-            val updatedMoodType = HAPPY
+        @Nested
+        @DisplayName("Update")
+        inner class Update {
+            @Test
+            internal fun `should update mood`() {
+                val user = user
+                val mood = mood.copy(type = SAD, user = user.id)
+                val updatedMood = mood.copy(type = HAPPY)
 
-            whenever(moodRepository.find(mood.id)).thenReturn(mood)
+                whenever(moodRepository.find(mood.id)).thenReturn(mood)
+                whenever(userRepository.find(any())).thenReturn(user)
 
-            val idCaptor = argumentCaptor<MoodId>()
-            val typeCaptor = argumentCaptor<MoodType>()
+                val idCaptor = argumentCaptor<MoodId>()
+                val typeCaptor = argumentCaptor<MoodType>()
 
-            unit.update(mood.id, updatedMoodType)
+                unit.updateType(updatedMood, user.id)
 
-            verify(moodRepository, times(1)).update(idCaptor.capture(), typeCaptor.capture())
-            verifyNoInteractions(userRepository)
-            assertThat(idCaptor.firstValue).isEqualTo(mood.id)
-            assertThat(typeCaptor.firstValue).isEqualTo(updatedMoodType)
-        }
-    }
-
-    @Nested
-    @DisplayName("User found")
-    inner class UserFound {
-
-        @Test
-        internal fun `should create mood`() {
-            val mood = mood
-            whenever(userRepository.find(user.id)).thenReturn(user)
-
-            val moodCaptor = argumentCaptor<Mood>()
-            val userIdCaptor = argumentCaptor<UserId>()
-
-            unit.create(mood, user.id)
-
-            verify(userRepository).find(user.id)
-            verify(moodRepository).createAll(listOf(moodCaptor.capture()), userIdCaptor.capture())
-            assertThat(moodCaptor.firstValue).isEqualTo(listOf(mood))
-            assertThat(userIdCaptor.firstValue).isEqualTo(user.id)
+                verify(moodRepository, times(1)).updateType(idCaptor.capture(), typeCaptor.capture())
+                assertThat(idCaptor.firstValue).isEqualTo(mood.id)
+                assertThat(typeCaptor.firstValue).isEqualTo(updatedMood.type)
+            }
         }
 
-        @Test
-        internal fun `should create list of moods`() {
-            val mood = mood
-            val anotherMood = mood.copy(id = MoodId())
-            val moods = listOf(mood, anotherMood)
-            whenever(userRepository.find(user.id)).thenReturn(user)
+        @Nested
+        @DisplayName("Delete")
+        inner class Delete {
+            @Test
+            internal fun `should delete mood`() {
+                val user = user.copy()
+                val mood = mood.copy(type = SAD, user = user.id)
 
-            val moodCaptor = argumentCaptor<Mood>()
-            val userIdCaptor = argumentCaptor<UserId>()
-            unit.createAll(moods, user.id)
+                whenever(userRepository.find(any())).thenReturn(user)
+                whenever(moodRepository.find(mood.id)).thenReturn(mood)
 
-            verify(userRepository, times(1)).find(user.id)
-            verify(moodRepository, times(1)).createAll(listOf(moodCaptor.capture()), userIdCaptor.capture())
-            assertThat(moodCaptor.firstValue).isEqualTo(moods)
-            assertThat(userIdCaptor.firstValue).isEqualTo(user.id)
-        }
+                val idCaptor = argumentCaptor<MoodId>()
 
-        @Test
-        internal fun `createComment throws an error if user is different`() {
-            val user = user
-            val anotherUser = User.fixture().copy(id = UserId())
+                unit.delete(mood.id, user.id)
 
-            val mood = mood.copy(user = user.id)
-            val comment = Comment.fixture().copy(author = anotherUser.id)
-
-            whenever(moodRepository.find(mood.id)).thenReturn(mood)
-            whenever(userRepository.find(comment.author)).thenReturn(anotherUser)
-
-            assertThrows<IllegalArgumentException> { unit.createComment(mood.id, comment) }
-
-            verify(moodRepository).find(any())
-            verify(userRepository).find(any())
+                verify(moodRepository, times(1)).delete(idCaptor.capture())
+            }
         }
     }
 
     @Nested
-    @DisplayName("User not found")
-    inner class UserNotFound {
+    @DisplayName("Invalid")
+    inner class Invalid {
 
-        @Test
-        internal fun `create should throw an error if no user found`() {
-            assertThrows<NoSuchElementException> { unit.create(Mood.fixture(), UserId()) }
-            verifyNoInteractions(moodRepository)
+        @Nested
+        @DisplayName("Create")
+        inner class Create {
+
+            @Test
+            internal fun `create should throw an error if no user found`() {
+                assertThrows<NoSuchElementException> { unit.create(Mood.fixture(), UserId()) }
+                verifyNoInteractions(moodRepository)
+            }
+
+            @Test
+            internal fun `createAll should throw an error`() {
+                assertThrows<NoSuchElementException> { unit.createAll(emptyList(), UserId()) }
+                verifyNoInteractions(moodRepository)
+            }
         }
 
-        @Test
-        internal fun `createAll should throw an error`() {
-            assertThrows<NoSuchElementException> { unit.createAll(emptyList(), UserId()) }
-            verifyNoInteractions(moodRepository)
+        @Nested
+        @DisplayName("Update")
+        inner class Update {
+            @Test
+            internal fun `update throws an error if no mood found`() {
+                whenever(userRepository.find(any())).thenReturn(user)
+                assertThrows<NoSuchElementException> { unit.updateType(Mood.fixture(), UserId()) }
+                verifyNoInteractions(userRepository)
+            }
         }
 
-        @Test
-        internal fun `createComment throws an error`() {
-            val mood = mood
-            whenever(moodRepository.find(mood.id)).thenReturn(mood)
-
-            assertThrows<IllegalArgumentException> { unit.createComment(mood.id, Comment.fixture()) }
-
-            verify(moodRepository, times(1)).find(mood.id)
-        }
-    }
-
-    @Nested
-    @DisplayName("Mood not found")
-    inner class MoodNotFound {
-        @Test
-        internal fun `createComment throws an error if no mood found`() {
-            assertThrows<NoSuchElementException> { unit.createComment(MoodId(), Comment.fixture()) }
-            verifyNoInteractions(userRepository)
-        }
-
-        @Test
-        internal fun `update throws an error if no mood found`() {
-            assertThrows<NoSuchElementException> { unit.update(MoodId(), HAPPY) }
-            verifyNoInteractions(userRepository)
-        }
+        @Nested
+        @DisplayName("Delete")
+        inner class Delete
     }
 }
