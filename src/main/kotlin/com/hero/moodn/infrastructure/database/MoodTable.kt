@@ -16,5 +16,4 @@ object MoodTable : Table<Nothing>("mood") {
     val createdAt = timestamp("created_at")
     val updatedAt = timestamp("updated_at")
     val user = int("moodn_user")
-    val comment = int("comment")
 }

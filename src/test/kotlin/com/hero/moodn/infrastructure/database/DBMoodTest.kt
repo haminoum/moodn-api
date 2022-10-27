@@ -54,23 +54,6 @@ internal class DBMoodTest {
     }
 
     @Test
-    internal fun `should update mood's comment`() {
-        val user = User.fixture()
-        userRepository.create(user)
-
-        val beforeNow = Instant.now().minusSeconds(200)
-        val mood = Mood.fixture().copy(user = user.id, createdAt = beforeNow, updatedAt = null)
-        moodRepository.createAll(listOf(mood), mood.user)
-
-        val comment = Comment.fixture().copy(author = user.id)
-
-        val updatedMood = moodRepository.update(mood.id, comment)!!
-
-        assertThat(updatedMood.updatedAt).isNotNull
-        assertThat(updatedMood.updatedAt).isAfterOrEqualTo(mood.createdAt)
-    }
-
-    @Test
     internal fun `should update mood's type`() {
         val user = User.fixture()
         userRepository.create(user)
@@ -79,8 +62,75 @@ internal class DBMoodTest {
         moodRepository.createAll(moods = listOf(mood), userId = user.id)
 
         val moodUpdated = MoodType.HAPPY
-        val updatedMood = moodRepository.update(moodId = mood.id, moodUpdated)!!
+        val updatedMood = moodRepository.updateType(moodId = mood.id, moodUpdated)!!
 
         assertThat(updatedMood.type).isEqualTo(moodUpdated)
+    }
+
+    @Test
+    internal fun `should delete mood`() {
+        val user = User.fixture()
+        userRepository.create(user)
+
+        val mood = Mood.fixture().copy(type = MoodType.SAD)
+        moodRepository.createAll(moods = listOf(mood), userId = user.id)
+
+        val deleted = moodRepository.delete(moodId = mood.id)
+
+        val dbMood = moodRepository.find(mood.id)
+
+        assertThat(deleted).isEqualTo(true)
+        assertThat(dbMood).isNull()
+    }
+
+    @Test
+    internal fun `should create a comment`() {
+        val user = User.fixture()
+        userRepository.create(user)
+        val mood = Mood.fixture().copy(type = MoodType.SAD)
+        moodRepository.createAll(moods = listOf(mood), userId = user.id)
+        var moodFromDB = moodRepository.find(mood.id)!!
+        assertThat(moodFromDB.comment).isNull()
+
+        val comment = Comment.fixture().copy(mood = mood.id)
+        moodRepository.createOrUpdateComment(comment)
+
+        val commentFromDB = moodRepository.findComment(comment.id)!!
+        assertThat(commentFromDB.mood).isEqualTo(comment.mood)
+        assertThat(commentFromDB.content).isEqualTo(comment.content)
+    }
+
+    @Test
+    internal fun `should update comment`() {
+        val user = User.fixture()
+        userRepository.create(user)
+
+        val beforeNow = Instant.now().minusSeconds(200)
+        val mood = Mood.fixture().copy(user = user.id, createdAt = beforeNow, updatedAt = null)
+        moodRepository.createAll(listOf(mood), mood.user)
+
+        val comment = Comment.fixture().copy(mood = mood.id)
+
+        val updatedMood = moodRepository.createOrUpdateComment(comment)!!
+
+        assertThat(updatedMood.updatedAt).isNotNull
+        assertThat(updatedMood.updatedAt).isAfterOrEqualTo(mood.createdAt)
+    }
+
+    @Test
+    internal fun `should delete a comment`() {
+        val user = User.fixture()
+        userRepository.create(user)
+        val mood = Mood.fixture().copy(type = MoodType.SAD)
+        moodRepository.createAll(moods = listOf(mood), userId = user.id)
+        val comment = Comment.fixture().copy(mood = mood.id)
+        moodRepository.createOrUpdateComment(comment)
+
+        val deleted = moodRepository.deleteComment(commentId = comment.id)
+
+        val dbMood = moodRepository.find(mood.id)!!
+
+        assertThat(deleted).isEqualTo(true)
+        assertThat(dbMood.comment).isNull()
     }
 }
