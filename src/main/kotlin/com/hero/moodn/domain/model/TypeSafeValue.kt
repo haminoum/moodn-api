@@ -10,7 +10,7 @@ abstract class TypeSafeValue<T> {
     val asString: String
         get() = value.toString()
 
-    /**
+    /** TODO
      * Usage of toString() on a null instance of TypeSafeValue will return `"null"`,
      * which will most likely lead to bugs.
      * Use the alternative asString method, which forces us to handle null values explicitly.

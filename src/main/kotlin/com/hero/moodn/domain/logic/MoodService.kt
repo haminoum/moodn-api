@@ -1,7 +1,6 @@
 package com.hero.moodn.domain.logic
 
 import com.hero.moodn.domain.api.Moods
-import com.hero.moodn.domain.model.Comment
 import com.hero.moodn.domain.model.Mood
 import com.hero.moodn.domain.model.MoodId
 import com.hero.moodn.domain.model.User
@@ -10,7 +9,6 @@ import com.hero.moodn.domain.spi.MoodRepository
 import com.hero.moodn.domain.spi.UserRepository
 import mu.KotlinLogging
 import org.springframework.stereotype.Component
-import org.springframework.transaction.annotation.Transactional
 
 @Component
 class MoodService(private val moodRepository: MoodRepository, private val userRepository: UserRepository) : Moods {
@@ -37,28 +35,6 @@ class MoodService(private val moodRepository: MoodRepository, private val userRe
     override fun delete(moodId: MoodId, userId: UserId): Boolean {
         validateUsers(moodId, userId)
         return moodRepository.delete(moodId)
-    }
-
-    @Transactional
-    override fun createComment(comment: Comment) {
-        val mood = findMood(comment.mood)
-        moodRepository.createOrUpdateComment(comment)
-        logger.debug("Comment created for mood ${mood.id} by ${comment.mood}")
-    }
-
-    @Transactional
-    override fun updateComment(moodId: MoodId, comment: Comment) {
-        val commentsMood = findMood(comment.mood)
-        validateUsers(moodId, commentsMood.user)
-        moodRepository.createOrUpdateComment(comment)
-        logger.debug("Comment updated for mood $moodId by ${comment.mood}")
-    }
-
-    override fun deleteComment(comment: Comment, moodId: MoodId) {
-        val commentsMood = findMood(comment.mood)
-        validateUsers(moodId, commentsMood.user)
-        moodRepository.deleteComment(comment.id)
-        logger.debug("Comment deleted for mood $moodId by ${comment.mood}")
     }
 
     private fun validateUser(userId: UserId) {
