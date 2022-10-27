@@ -2,6 +2,7 @@ package com.hero.moodn.infrastructure.database
 
 import com.hero.moodn.domain.model.Comment
 import com.hero.moodn.domain.model.Mood
+import com.hero.moodn.domain.model.MoodType
 import com.hero.moodn.domain.model.User
 import fixture
 import org.assertj.core.api.Assertions.assertThat
@@ -53,17 +54,33 @@ internal class DBMoodTest {
     }
 
     @Test
-    internal fun `should update mood`() {
-        val beforeNow = Instant.now().minusSeconds(200)
+    internal fun `should update mood's comment`() {
         val user = User.fixture()
-        val mood = Mood.fixture().copy(user = user.id, createdAt = beforeNow, updatedAt = null)
-        val comment = Comment.fixture().copy(author = user.id)
         userRepository.create(user)
+
+        val beforeNow = Instant.now().minusSeconds(200)
+        val mood = Mood.fixture().copy(user = user.id, createdAt = beforeNow, updatedAt = null)
         moodRepository.createAll(listOf(mood), mood.user)
 
-        val updatedMood = moodRepository.updateMood(mood.id, comment)!!
+        val comment = Comment.fixture().copy(author = user.id)
+
+        val updatedMood = moodRepository.update(mood.id, comment)!!
 
         assertThat(updatedMood.updatedAt).isNotNull
         assertThat(updatedMood.updatedAt).isAfterOrEqualTo(mood.createdAt)
+    }
+
+    @Test
+    internal fun `should update mood's type`() {
+        val user = User.fixture()
+        userRepository.create(user)
+
+        val mood = Mood.fixture().copy(type = MoodType.SAD)
+        moodRepository.createAll(moods = listOf(mood), userId = user.id)
+
+        val moodUpdated = MoodType.HAPPY
+        val updatedMood = moodRepository.update(moodId = mood.id, moodUpdated)!!
+
+        assertThat(updatedMood.type).isEqualTo(moodUpdated)
     }
 }

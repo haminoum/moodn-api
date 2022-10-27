@@ -3,6 +3,9 @@ package com.hero.moodn.domain.logic
 import com.hero.moodn.domain.model.Comment
 import com.hero.moodn.domain.model.Mood
 import com.hero.moodn.domain.model.MoodId
+import com.hero.moodn.domain.model.MoodType
+import com.hero.moodn.domain.model.MoodType.HAPPY
+import com.hero.moodn.domain.model.MoodType.SAD
 import com.hero.moodn.domain.model.User
 import com.hero.moodn.domain.model.UserId
 import com.hero.moodn.domain.spi.MoodRepository
@@ -43,20 +46,42 @@ internal class MoodServiceTest {
         mood = Mood.fixture()
     }
 
-    @Test
-    internal fun `createComment updates mood`() {
-        val user = user
-        val mood = mood.copy(user = user.id)
-        val comment = Comment.fixture().copy(author = user.id)
+    @Nested
+    @DisplayName("Mood found")
+    inner class MoodFound {
+        @Test
+        internal fun `createComment updates mood`() {
+            val user = user
+            val mood = mood.copy(user = user.id)
+            val comment = Comment.fixture().copy(author = user.id)
 
-        whenever(moodRepository.find(any())).thenReturn(mood)
-        whenever(userRepository.find(any())).thenReturn(user)
+            whenever(moodRepository.find(any())).thenReturn(mood)
+            whenever(userRepository.find(any())).thenReturn(user)
 
-        unit.createComment(mood.id, comment)
+            unit.createComment(mood.id, comment)
 
-        verify(moodRepository).find(mood.id)
-        verify(userRepository).find(user.id)
-        verify(moodRepository).updateMood(mood.id, comment)
+            verify(moodRepository).find(mood.id)
+            verify(userRepository).find(user.id)
+            verify(moodRepository).update(mood.id, comment)
+        }
+
+        @Test
+        internal fun `should update mood`() {
+            val mood = mood.copy(type = SAD)
+            val updatedMoodType = HAPPY
+
+            whenever(moodRepository.find(mood.id)).thenReturn(mood)
+
+            val idCaptor = argumentCaptor<MoodId>()
+            val typeCaptor = argumentCaptor<MoodType>()
+
+            unit.update(mood.id, updatedMoodType)
+
+            verify(moodRepository, times(1)).update(idCaptor.capture(), typeCaptor.capture())
+            verifyNoInteractions(userRepository)
+            assertThat(idCaptor.firstValue).isEqualTo(mood.id)
+            assertThat(typeCaptor.firstValue).isEqualTo(updatedMoodType)
+        }
     }
 
     @Nested
@@ -147,6 +172,12 @@ internal class MoodServiceTest {
         @Test
         internal fun `createComment throws an error if no mood found`() {
             assertThrows<NoSuchElementException> { unit.createComment(MoodId(), Comment.fixture()) }
+            verifyNoInteractions(userRepository)
+        }
+
+        @Test
+        internal fun `update throws an error if no mood found`() {
+            assertThrows<NoSuchElementException> { unit.update(MoodId(), HAPPY) }
             verifyNoInteractions(userRepository)
         }
     }

@@ -3,6 +3,7 @@ package com.hero.moodn.domain.spi
 import com.hero.moodn.domain.model.Comment
 import com.hero.moodn.domain.model.Mood
 import com.hero.moodn.domain.model.MoodId
+import com.hero.moodn.domain.model.MoodType
 import com.hero.moodn.domain.model.UserId
 import org.springframework.stereotype.Repository
 
@@ -24,10 +25,17 @@ interface MoodRepository {
     fun createAll(moods: List<Mood>, userId: UserId)
 
     /**
-     * Creates or updates a comment for a [Mood]
+     * Updates a comment for a [Mood]
      * @param moodId of [Mood] to be updated
      * @param comment [Comment] to be created
      * @return [Mood]
      */
-    fun updateMood(moodId: MoodId, comment: Comment): Mood?
+    fun update(moodId: MoodId, comment: Comment): Mood?
+
+    /**
+     * Updates a [Mood]
+     * @param moodType to be updated
+     * @return [Mood]
+     */
+    fun update(moodId: MoodId, moodType: MoodType): Mood?
 }

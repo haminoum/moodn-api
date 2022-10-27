@@ -3,6 +3,7 @@ package com.hero.moodn.infrastructure.database
 import com.hero.moodn.domain.model.Comment
 import com.hero.moodn.domain.model.Mood
 import com.hero.moodn.domain.model.MoodId
+import com.hero.moodn.domain.model.MoodType
 import com.hero.moodn.domain.model.UserId
 import com.hero.moodn.domain.spi.MoodRepository
 import org.ktorm.database.Database
@@ -45,7 +46,7 @@ class DBMood(val database: Database) : MoodRepository {
         }
     }
 
-    override fun updateMood(moodId: MoodId, comment: Comment): Mood? {
+    override fun update(moodId: MoodId, comment: Comment): Mood? {
         val authorDBKey = queryDBUserKey(comment.author)
         val commentDBKey = database.insertAndGenerateKey(
             CommentTable,
@@ -61,6 +62,14 @@ class DBMood(val database: Database) : MoodRepository {
             set(it.updatedAt, Instant.now())
             set(it.comment, commentDBKey)
 
+            where { MoodTable.externalId eq moodId }
+        }
+        return this.find(moodId)
+    }
+
+    override fun update(moodId: MoodId, moodType: MoodType): Mood? {
+        database.update(MoodTable) {
+            set(MoodTable.type, moodType)
             where { MoodTable.externalId eq moodId }
         }
         return this.find(moodId)
