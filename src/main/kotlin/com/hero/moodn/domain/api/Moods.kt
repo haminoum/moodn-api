@@ -3,6 +3,7 @@ package com.hero.moodn.domain.api
 import com.hero.moodn.domain.model.Comment
 import com.hero.moodn.domain.model.Mood
 import com.hero.moodn.domain.model.MoodId
+import com.hero.moodn.domain.model.MoodType
 import com.hero.moodn.domain.model.UserId
 
 interface Moods {
@@ -26,4 +27,10 @@ interface Moods {
      * @param userId of user mood is created for
      */
     fun createAll(moods: List<Mood>, userId: UserId)
+
+    /**
+     * Updates a [Mood]
+     * @param moodType to be updated
+     */
+    fun update(moodId: MoodId, moodType: MoodType)
 }
