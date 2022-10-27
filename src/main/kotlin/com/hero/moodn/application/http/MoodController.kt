@@ -17,11 +17,7 @@ class MoodController(private val moods: Moods) {
     @PostMapping("create")
     fun addMood(@RequestParam type: String, @RequestParam username: String) {
         val userId = UserId(username)
-        val mood = Mood(
-            id = MoodId(),
-            type = MoodType.HAPPY,
-            user = userId
-        )
+        val mood = Mood(id = MoodId(), type = MoodType.HAPPY, user = userId)
         moods.create(mood, userId)
     }
 }
