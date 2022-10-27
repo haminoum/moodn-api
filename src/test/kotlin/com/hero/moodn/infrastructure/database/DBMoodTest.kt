@@ -1,6 +1,5 @@
 package com.hero.moodn.infrastructure.database
 
-import com.hero.moodn.domain.model.Comment
 import com.hero.moodn.domain.model.Mood
 import com.hero.moodn.domain.model.MoodType
 import com.hero.moodn.domain.model.User
@@ -15,7 +14,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest
 import org.springframework.context.annotation.Import
 import org.springframework.transaction.annotation.Transactional
-import java.time.Instant
 
 @JdbcTest(properties = ["spring.profiles.active=postgres-test-container"])
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -81,56 +79,5 @@ internal class DBMoodTest {
 
         assertThat(deleted).isEqualTo(true)
         assertThat(dbMood).isNull()
-    }
-
-    @Test
-    internal fun `should create a comment`() {
-        val user = User.fixture()
-        userRepository.create(user)
-        val mood = Mood.fixture().copy(type = MoodType.SAD)
-        moodRepository.createAll(moods = listOf(mood), userId = user.id)
-        var moodFromDB = moodRepository.find(mood.id)!!
-        assertThat(moodFromDB.comment).isNull()
-
-        val comment = Comment.fixture().copy(mood = mood.id)
-        moodRepository.createOrUpdateComment(comment)
-
-        val commentFromDB = moodRepository.findComment(comment.id)!!
-        assertThat(commentFromDB.mood).isEqualTo(comment.mood)
-        assertThat(commentFromDB.content).isEqualTo(comment.content)
-    }
-
-    @Test
-    internal fun `should update comment`() {
-        val user = User.fixture()
-        userRepository.create(user)
-
-        val beforeNow = Instant.now().minusSeconds(200)
-        val mood = Mood.fixture().copy(user = user.id, createdAt = beforeNow, updatedAt = null)
-        moodRepository.createAll(listOf(mood), mood.user)
-
-        val comment = Comment.fixture().copy(mood = mood.id)
-
-        val updatedMood = moodRepository.createOrUpdateComment(comment)!!
-
-        assertThat(updatedMood.updatedAt).isNotNull
-        assertThat(updatedMood.updatedAt).isAfterOrEqualTo(mood.createdAt)
-    }
-
-    @Test
-    internal fun `should delete a comment`() {
-        val user = User.fixture()
-        userRepository.create(user)
-        val mood = Mood.fixture().copy(type = MoodType.SAD)
-        moodRepository.createAll(moods = listOf(mood), userId = user.id)
-        val comment = Comment.fixture().copy(mood = mood.id)
-        moodRepository.createOrUpdateComment(comment)
-
-        val deleted = moodRepository.deleteComment(commentId = comment.id)
-
-        val dbMood = moodRepository.find(mood.id)!!
-
-        assertThat(deleted).isEqualTo(true)
-        assertThat(dbMood.comment).isNull()
     }
 }

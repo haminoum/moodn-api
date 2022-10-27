@@ -1,61 +1,52 @@
 package com.hero.moodn.infrastructure.database
 
 import com.hero.moodn.domain.model.Comment
+import com.hero.moodn.domain.model.CommentId
 import com.hero.moodn.domain.model.Mood
 import com.hero.moodn.domain.model.MoodId
-import com.hero.moodn.domain.model.MoodType
 import com.hero.moodn.domain.model.UserId
-import com.hero.moodn.domain.spi.MoodRepository
+import com.hero.moodn.domain.spi.CommentRepository
 import org.ktorm.database.Database
 import org.ktorm.dsl.QueryRowSet
 import org.ktorm.dsl.delete
 import org.ktorm.dsl.eq
 import org.ktorm.dsl.from
 import org.ktorm.dsl.innerJoin
+import org.ktorm.dsl.insert
 import org.ktorm.dsl.map
 import org.ktorm.dsl.select
-import org.ktorm.dsl.update
 import org.ktorm.dsl.where
-import org.ktorm.support.postgresql.bulkInsert
 import org.springframework.stereotype.Component
 
 @Component
-class DBMood(val database: Database) : MoodRepository {
+class DBComment(val database: Database) : CommentRepository {
 
-    override fun find(moodId: MoodId): Mood? =
-        database.from(MoodTable)
-            .innerJoin(UserTable, on = MoodTable.user eq UserTable.id)
-            .select(MoodTable.columns + UserTable.externalId)
-            .where(MoodTable.externalId eq moodId)
-            .map(::toMood)
+    override fun find(commentId: CommentId): Comment? =
+        database.from(CommentTable)
+            .innerJoin(MoodTable, on = CommentTable.mood eq MoodTable.id)
+            .select(CommentTable.columns + MoodTable.externalId)
+            .where(CommentTable.externalId eq commentId)
+            .map(::toComment)
             .firstOrNull()
 
-    override fun createAll(moods: List<Mood>, userId: UserId) {
-        val userDBKey = queryDBUserKey(userId)
-
-        database.bulkInsert(MoodTable) {
-            moods.forEach { mood ->
-                item {
-                    set(it.externalId, mood.id)
-                    set(it.type, mood.type)
-                    set(it.createdAt, mood.createdAt)
-                    set(MoodTable.user, userDBKey)
-                }
-            }
+    override fun createOrUpdateComment(comment: Comment): Comment? {
+        val moodDBKey = queryDBMoodKey(comment.mood)
+        database.insert(
+            CommentTable,
+        ) {
+            set(CommentTable.externalId, comment.id)
+            set(CommentTable.mood, moodDBKey)
+            set(CommentTable.content, comment.content)
+            set(CommentTable.createdAt, comment.createdAt)
+            set(CommentTable.updatedAt, comment.updatedAt)
         }
+
+        return this.find(comment.id)
     }
 
-    override fun updateType(moodId: MoodId, moodType: MoodType): Mood? {
-        database.update(MoodTable) {
-            set(MoodTable.type, moodType)
-            where { MoodTable.externalId eq moodId }
-        }
-        return this.find(moodId)
-    }
-
-    override fun delete(moodId: MoodId): Boolean {
-        val count = database.delete(MoodTable) {
-            it.externalId eq moodId
+    override fun delete(commentId: CommentId): Boolean {
+        val count = database.delete(CommentTable) {
+            return@delete it.externalId eq commentId
         }
         return count >= 1
     }

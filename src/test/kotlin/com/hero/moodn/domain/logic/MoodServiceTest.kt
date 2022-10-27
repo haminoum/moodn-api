@@ -1,7 +1,5 @@
 package com.hero.moodn.domain.logic
 
-import com.hero.moodn.domain.model.Comment
-import com.hero.moodn.domain.model.CommentId
 import com.hero.moodn.domain.model.Mood
 import com.hero.moodn.domain.model.MoodId
 import com.hero.moodn.domain.model.MoodType
@@ -86,19 +84,6 @@ internal class MoodServiceTest {
                 assertThat(moodCaptor.firstValue).isEqualTo(moods)
                 assertThat(userIdCaptor.firstValue).isEqualTo(user.id)
             }
-
-            @Test
-            internal fun `createComment creates a comment`() {
-                val mood = mood.copy()
-                val comment = Comment.fixture().copy(mood = mood.id)
-
-                whenever(moodRepository.find(any())).thenReturn(mood)
-
-                unit.createComment(comment)
-
-                verify(moodRepository).find(mood.id)
-                verify(moodRepository).createOrUpdateComment(comment)
-            }
         }
 
         @Nested
@@ -122,22 +107,6 @@ internal class MoodServiceTest {
                 assertThat(idCaptor.firstValue).isEqualTo(mood.id)
                 assertThat(typeCaptor.firstValue).isEqualTo(updatedMood.type)
             }
-
-            @Test
-            internal fun `should update comment`() {
-                val mood = mood.copy(comment = null)
-                val updatedComment = Comment.fixture().copy(mood = mood.id)
-
-                whenever(moodRepository.find(any())).thenReturn(mood)
-
-                val commentCaptor = argumentCaptor<Comment>()
-
-                unit.updateComment(mood.id, updatedComment)
-
-                verify(moodRepository).createOrUpdateComment(commentCaptor.capture())
-                verify(moodRepository).find(mood.id)
-                assertThat(commentCaptor.firstValue).isEqualTo(updatedComment)
-            }
         }
 
         @Nested
@@ -156,22 +125,6 @@ internal class MoodServiceTest {
                 unit.delete(mood.id, user.id)
 
                 verify(moodRepository, times(1)).delete(idCaptor.capture())
-            }
-
-            @Test
-            internal fun `should delete comment`() {
-                val comment = Comment.fixture().copy(mood = mood.id)
-                val mood = mood.copy(comment = comment.id)
-
-                whenever(moodRepository.find(any())).thenReturn(mood)
-
-                val commentIdCaptor = argumentCaptor<CommentId>()
-
-                unit.deleteComment(comment, mood.id)
-
-                verify(moodRepository).deleteComment(commentIdCaptor.capture())
-                verify(moodRepository).find(mood.id)
-                assertThat(commentIdCaptor.firstValue).isEqualTo(comment.id)
             }
         }
     }
@@ -195,12 +148,6 @@ internal class MoodServiceTest {
                 assertThrows<NoSuchElementException> { unit.createAll(emptyList(), UserId()) }
                 verifyNoInteractions(moodRepository)
             }
-
-            @Test
-            internal fun `createComment throws an error if no mood found`() {
-                whenever(userRepository.find(any())).thenReturn(user)
-                assertThrows<NoSuchElementException> { unit.createComment(Comment.fixture()) }
-            }
         }
 
         @Nested
@@ -210,13 +157,6 @@ internal class MoodServiceTest {
             internal fun `update throws an error if no mood found`() {
                 whenever(userRepository.find(any())).thenReturn(user)
                 assertThrows<NoSuchElementException> { unit.updateType(Mood.fixture(), UserId()) }
-                verifyNoInteractions(userRepository)
-            }
-
-            @Test
-            internal fun `update comment throws an error if no mood found`() {
-                whenever(userRepository.find(any())).thenReturn(user)
-                assertThrows<NoSuchElementException> { unit.updateComment(MoodId(), Comment.fixture()) }
                 verifyNoInteractions(userRepository)
             }
         }
