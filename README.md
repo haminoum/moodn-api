@@ -19,6 +19,12 @@ brew install grpcurl
 
 3. [Install Docker](https://docs.docker.com/desktop/mac/install/)
 
+## Containerize
+````bash
+# builds and pushes a container image to container registry
+gradle jib --image=MOODN_IMAGE
+````
+
 ## Running locally
 mood-api runs on port `55555`
 
