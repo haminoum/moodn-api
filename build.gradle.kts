@@ -19,6 +19,12 @@ configurations {
     compileOnly {
         extendsFrom(configurations.annotationProcessor.get())
     }
+    jib {
+        to {
+            image = "408382269111.dkr.ecr.eu-central-1.amazonaws.com/moodin-api"
+            setCredHelper("desktop")
+        }
+    }
 }
 
 repositories {
