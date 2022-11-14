@@ -21,7 +21,7 @@ configurations {
     }
     jib {
         to {
-            image = "408382269111.dkr.ecr.eu-central-1.amazonaws.com/moodin-api"
+            image = "408382269111.dkr.ecr.eu-central-1.amazonaws.com/moodn-api"
             setCredHelper("desktop")
         }
     }

@@ -59,7 +59,15 @@ psql -U postgres
 # Create mood
 curl "http://localhost:{$PORT}/moods/create?type=${MOOD}&username=${USER}" -XPOST
 ```
-
+## Connecting to AWS Database
+````bash
+psql \
+   --host=<DB instance endpoint> \
+   --port=<port> \
+   --username=<master username> \
+   --password \
+   --dbname=<database name>
+````
 ## Insight
 
 [Emotion vs Mood](https://www.iihs.edu.lk/pluginfile.php/18502/mod_resource/content/1/emotions.pdf)

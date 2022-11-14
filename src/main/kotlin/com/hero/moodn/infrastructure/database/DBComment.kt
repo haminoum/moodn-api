@@ -46,7 +46,7 @@ class DBComment(val database: Database) : CommentRepository {
 
     override fun delete(commentId: CommentId): Boolean {
         val count = database.delete(CommentTable) {
-            return@delete it.externalId eq commentId
+            it.externalId eq commentId
         }
         return count >= 1
     }

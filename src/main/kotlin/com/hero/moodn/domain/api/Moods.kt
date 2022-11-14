@@ -7,9 +7,7 @@ import com.hero.moodn.domain.model.UserId
 interface Moods {
 
     fun create(mood: Mood, userId: UserId)
-
     fun createAll(moods: List<Mood>, userId: UserId)
-
     fun delete(moodId: MoodId): Boolean
     fun updateType(mood: Mood)
 }
