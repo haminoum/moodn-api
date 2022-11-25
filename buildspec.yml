@@ -3,15 +3,17 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      java: corretto8
+      java: corretto17
   build:
     commands:
       - echo Build started on `date`
-      - ./gradlew build --scan
+      - ./gradlew build
+    on-failure: ABORT
+    finally:
+      - echo Build success
   post_build:
     commands:
       - echo Build completed on `date`
-      - mvn package
     finally:
       - rm -f  /root/.gradle/caches/modules-2/modules-2.lock
       - rm -fr /root/.gradle/caches/*/plugin-resolution/
@@ -19,8 +21,8 @@ artifacts:
   files:
     - '*-all.jar'
   base-directory: 'build/libs'
-  cache:
-    paths:
-      - '/root/.gradle/caches/**/*'
-      - '/root/.gradle/wrapper/**/*'
   discard-paths: yes
+cache:
+  paths:
+    - '/root/.gradle/caches/**/*'
+    - '/root/.gradle/wrapper/**/*'

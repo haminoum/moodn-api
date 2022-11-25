@@ -7,7 +7,10 @@ import com.hero.moodn.domain.spi.CommentRepository
 import com.hero.moodn.domain.spi.MoodRepository
 import fixture
 import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.kotlin.any
@@ -28,13 +31,11 @@ internal class CommentServiceTest {
         commentRepository = mock()
 
         unit = CommentService(moodRepository, commentRepository)
-
-        mood = Mood.fixture()
     }
 
     @Test
     internal fun `createComment creates a comment`() {
-        val mood = mood.copy()
+        val mood = Mood.fixture()
         val comment = Comment.fixture().copy(mood = mood.id)
 
         whenever(moodRepository.find(any())).thenReturn(mood)
@@ -47,14 +48,14 @@ internal class CommentServiceTest {
 
     @Test
     internal fun `should update comment`() {
-        val mood = mood.copy(comment = null)
+        val mood = Mood.fixture().copy(comment = null)
         val updatedComment = Comment.fixture().copy(mood = mood.id)
 
         whenever(moodRepository.find(any())).thenReturn(mood)
 
         val commentCaptor = argumentCaptor<Comment>()
 
-        unit.update(mood.id, updatedComment)
+        unit.update(updatedComment)
 
         verify(commentRepository).createOrUpdateComment(commentCaptor.capture())
         verify(moodRepository).find(mood.id)
@@ -63,18 +64,19 @@ internal class CommentServiceTest {
 
     @Test
     internal fun `should delete comment`() {
-        val comment = Comment.fixture().copy(mood = mood.id)
-        val mood = mood.copy(comment = comment.id)
-
-        whenever(moodRepository.find(any())).thenReturn(mood)
+        val comment = Comment.fixture()
 
         val commentIdCaptor = argumentCaptor<CommentId>()
 
-        unit.delete(comment, mood.id)
+        unit.delete(comment.id)
+
+        val actualComment = commentRepository.find(comment.id)
 
         verify(commentRepository).delete(commentIdCaptor.capture())
-        verify(moodRepository).find(mood.id)
-        Assertions.assertThat(commentIdCaptor.firstValue).isEqualTo(comment.id)
+        verify(commentRepository).find(comment.id)
+
+        assertThat(commentIdCaptor.firstValue).isEqualTo(comment.id)
+        assertThat(actualComment).isNull()
     }
 
     @Test
@@ -84,7 +86,7 @@ internal class CommentServiceTest {
 
     @Test
     internal fun `update comment throws an error if no mood found`() {
-        assertThrows<NoSuchElementException> { unit.update(MoodId(), Comment.fixture()) }
+        assertThrows<NoSuchElementException> { unit.update(Comment.fixture()) }
     }
 
     @Nested
