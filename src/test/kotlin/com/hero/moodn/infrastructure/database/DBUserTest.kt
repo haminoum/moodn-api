@@ -3,6 +3,7 @@ package com.hero.moodn.infrastructure.database
 import com.hero.moodn.domain.model.User
 import fixture
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.Ignore
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
@@ -32,6 +33,7 @@ internal class DBUserTest {
     }
 
     @Test
+    @Ignore
     internal fun `should create and find user`() {
         val user = User.fixture()
         repository.create(user)
@@ -42,6 +44,7 @@ internal class DBUserTest {
     }
 
     @Test
+    @Ignore
     internal fun `should create multiple users at once`() {
         val user = User.fixture()
         val anotherUser = User.fixture().copy(username = "Big Ham")
@@ -56,6 +59,7 @@ internal class DBUserTest {
     }
 
     @Test
+    @Ignore
     internal fun `should update a user`() {
         val now = Instant.now()
         val user = User.fixture().copy(createdAt = now.minusSeconds(500))
