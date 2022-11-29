@@ -58,7 +58,7 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
     testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
     testImplementation("org.testcontainers:postgresql")
-//    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
     testImplementation("org.ktorm:ktorm-core:3.5.0")
 }

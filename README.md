@@ -1,5 +1,7 @@
 # mood-api
 
+[![CI](https://github.com/haminoum/moodn-api/actions/workflows/gradle.yml/badge.svg)](https://github.com/haminoum/moodn-api/actions/workflows/gradle.yml)
+
 A service that helps with the creation of moods.
 
 ## First time setup
@@ -68,6 +70,8 @@ psql \
    --password \
    --dbname=<database name>
 ````
+
+
 ## Insight
 
 [Emotion vs Mood](https://www.iihs.edu.lk/pluginfile.php/18502/mod_resource/content/1/emotions.pdf)
