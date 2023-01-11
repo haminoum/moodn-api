@@ -1,0 +1,4 @@
+# Enable auto-env through the sdkman_auto_env config
+# Use `$ sdk env` to enable the versions this file or set `sdkman_auto_env=true` in ~/.sdkman/etc/config.
+# Add key=value pairs of SDKs to use below
+java=17.0.5-tem
