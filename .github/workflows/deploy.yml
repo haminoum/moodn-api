@@ -15,7 +15,7 @@ env:
   ECR_REPOSITORY: moodn-api-repository
   ECS_SERVICE: moodn-api-service
   ECS_CLUSTER: moodn-api-cluster
-  ECS_TASK_DEFINITION: .aws/moodn-api-task-definition
+  ECS_TASK_DEFINITION: .aws/moodn-api-task-definition.json
 
   CONTAINER_NAME: moodn-api-task-container           # set this to the name of the container in the
   # containerDefinitions section of your task definition
@@ -63,7 +63,7 @@ jobs:
           image: ${{ steps.build-image.outputs.image }}
 
       - name: Deploy Amazon ECS task definition
-        uses: aws-actions/amazon-ecs-deploy-task-definition@de0132cf8cdedb79975c6d42b77eb7ea193cf28e
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
           service: ${{ env.ECS_SERVICE }}
